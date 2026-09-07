@@ -235,6 +235,18 @@
   }
   .letter-body p{
     font-size:clamp(1rem,3.4vw,1.12rem); line-height:1.9; margin-bottom:1.15em;
+    opacity:0; /* each paragraph rises in like the next page as it begins to type */
+  }
+  .letter-body p.in{ animation:paraTurn .9s ease forwards; }
+  @keyframes paraTurn{
+    0%{ opacity:0; transform:translateY(18px); }
+    100%{ opacity:1; transform:none; }
+  }
+  /* gentle parchment shimmer while a new paragraph settles */
+  #stage-letter .paper.turning{ animation:paperSettle 1.6s ease; }
+  @keyframes paperSettle{
+    0%,100%{ box-shadow:0 30px 80px -20px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.4) inset; }
+    35%{ box-shadow:0 30px 80px -20px rgba(0,0,0,.5), 0 0 0 1px rgba(222,150,110,.10) inset, 0 12px 60px -12px rgba(214,62,116,.35); }
   }
   .sign{
     font-family:var(--script); font-size:clamp(1.7rem,6vw,2.3rem);
@@ -769,6 +781,7 @@ function buildLetter(){
   $("celeb-msg").textContent = CONFIG.celebration.message;
   $("celeb-note").textContent = (CONFIG.celebration.note || "").replace(/\{name\}/g, CONFIG.recipient);
   let typed = false;
+  const paper = document.querySelector("#stage-letter .paper");
   const revealLetter = () => {
     if (typed) return;
     typed = true;
@@ -777,7 +790,20 @@ function buildLetter(){
     let idx = 0;
     (function nextPara(){
       if (idx >= ps.length) return;
-      typeWriter(ps[idx], fulls[idx], () => {
+      const p = ps[idx];
+      p.classList.add("in");              // rise in like the next page
+      if (idx > 0){
+        paper.classList.remove("turning");
+        void paper.offsetWidth;           // restart the settle shimmer
+        paper.classList.add("turning");
+        if (paper.scrollHeight > paper.clientHeight){
+          paper.scrollTo({ top: paper.scrollHeight, behavior: "smooth" });
+        }
+      }
+      typeWriter(p, fulls[idx], () => {
+        if (paper.scrollHeight > paper.clientHeight){
+          paper.scrollTo({ top: paper.scrollHeight, behavior: "smooth" });
+        }
         idx++;
         setTimeout(nextPara, PARA_PAUSE);
       });
