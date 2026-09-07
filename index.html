@@ -740,6 +740,7 @@ function go(id){
 
 /* ---------- reveal text ---------- */
 const TYPE_DELAY = 40;
+const PARA_PAUSE = 800; // beat after each paragraph before the next starts typing
 function typeWriter(el, full, done){
   el.style.whiteSpace = "normal";
   let i = 0;
@@ -776,7 +777,10 @@ function buildLetter(){
     let idx = 0;
     (function nextPara(){
       if (idx >= ps.length) return;
-      typeWriter(ps[idx], fulls[idx], () => { idx++; nextPara(); });
+      typeWriter(ps[idx], fulls[idx], () => {
+        idx++;
+        setTimeout(nextPara, PARA_PAUSE);
+      });
     })();
   };
   return revealLetter;
