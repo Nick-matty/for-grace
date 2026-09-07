@@ -429,14 +429,16 @@
     margin:9px 0 7px;
   }
   .mp-controls button{
+    position:relative;
     background:transparent; border:none; color:#fff; cursor:pointer;
     width:34px; height:34px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
     padding:0; line-height:0;
     transition:background .2s ease, transform .15s ease;
   }
+  /* icons are absolutely centered inside the circle so they sit dead-centre on every device */
   .mp-controls button svg{
-    width:15px; height:15px; display:block; fill:currentColor;
+    position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;
+    width:15px; height:15px; fill:currentColor;
   }
   .mp-controls button:hover{ background:rgba(255,255,255,.18); }
   .mp-controls button:active{ transform:scale(.9); }
@@ -446,9 +448,9 @@
     box-shadow:0 4px 12px rgba(0,0,0,.22);
   }
   #mp-play svg{ width:20px; height:20px; }
-  #mp-play .pi-pause{ display:none; }
-  #mp-play.playing .pi-play{ display:none; }
-  #mp-play.playing .pi-pause{ display:block; }
+  #mp-play .pi-pause{ visibility:hidden; }
+  #mp-play.playing .pi-play{ visibility:hidden; }
+  #mp-play.playing .pi-pause{ visibility:visible; }
   .mp-progress{ width:100%; }
   .mp-bar{
     position:relative; height:5px; border-radius:999px;
@@ -614,7 +616,7 @@
           <span class="mp-song" id="mp-song"></span>
           <div class="mp-controls">
             <button id="mp-prev" aria-label="Restart the song"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 6.6h2v10.8h-2z"/><path d="M18.9 7.1v9.8L11 12z"/></svg></button>
-            <button id="mp-play" aria-label="Play"><svg class="pi-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.8v12.4L18.9 12z"/></svg><svg class="pi-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="7.2" y="5.3" width="3.3" height="13.4" rx="1.1"/><rect x="13.5" y="5.3" width="3.3" height="13.4" rx="1.1"/></svg></button>
+            <button id="mp-play" aria-label="Play"><svg class="pi-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 5.4 19 12 8.8 18.6z"/></svg><svg class="pi-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="7.2" y="5.2" width="3.4" height="13.6" rx="1.2"/><rect x="13.4" y="5.2" width="3.4" height="13.6" rx="1.2"/></svg></button>
             <button id="mp-next" aria-label="Skip ahead"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.1 7.1v9.8L13 12z"/><path d="M15.4 6.6h2v10.8h-2z"/></svg></button>
           </div>
           <div class="mp-progress">
